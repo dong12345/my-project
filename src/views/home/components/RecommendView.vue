@@ -38,7 +38,7 @@ export default {
   props: {
     recommends: {
       type: Array,
-      default: function () {
+      default () {
         return [];
       }
     }

@@ -22,7 +22,7 @@ export default {
   props: {
     banners: {
       type: Array,
-      default: function () {
+      default () {
         return [];
       }
     }
