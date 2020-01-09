@@ -119,6 +119,7 @@
 
 <script>
 import BScroll from 'better-scroll'
+import { myApi } from 'network/request.js'
 export default {
   components: {},
   data () {
@@ -131,6 +132,12 @@ export default {
     let scroll = new BScroll(wrapper);
   },
   methods: {},
-  created () { }
+  created () {
+    myApi({
+      url: '/companies'
+    }).then(res => {
+      console.log('获取的数据为:', res);
+    })
+  }
 };
 </script>

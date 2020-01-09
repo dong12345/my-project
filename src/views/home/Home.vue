@@ -3,7 +3,12 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content">
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            :pull-up-load="true"
+            @scroll="scrollContent"
+            @pullingUp="loadMore">
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature></feature>
@@ -12,7 +17,8 @@
                    @tabClick="tabClick"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
-
+    <back-top @click.native="backClick"
+              v-show="isTopShow"></back-top>
   </div>
 </template>
 
@@ -55,6 +61,7 @@ import NavBar from 'components/common/navbar/NavBar'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/backTop/BackTop'
 
 import HomeSwiper from './components/HomeSwiper'
 import RecommendView from './components/RecommendView'
@@ -66,6 +73,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
+    BackTop,
     HomeSwiper,
     RecommendView,
     Feature
@@ -79,7 +87,8 @@ export default {
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
       },
-      currentType: 'pop'
+      currentType: 'pop',
+      isTopShow: false
     }
   },
   watch: {},
@@ -89,6 +98,9 @@ export default {
     }
   },
   methods: {
+    backClick () {
+      this.$refs.scroll.scrollTo(0, 0, 1000);
+    },
     tabClick (index) {
       console.log(index);
       switch (index) {
@@ -103,6 +115,16 @@ export default {
           break;
       }
     },
+    scrollContent (position) {
+      this.isTopShow = (-position.y) > 1000;
+    },
+    loadMore () {
+      this.getHomeGoods(this.currentType);
+      this.$refs.scroll.finishPullUp();
+    },
+    /**
+     * 网络请求方法
+     */
     getHomeMultidata () {
       getHomeMultidata().then(res => {
         this.banners = res.data.banner.list;
@@ -112,9 +134,10 @@ export default {
     getHomeGoods (type) {
       let page = this.goods[type].page + 1;
       getHomeGoods(type, page).then(res => {
-        this.goods[type].page++;
-        this.goods[type].list.push(...res.data.list);
-        // console.log('goods:', this.goods);
+        if (res) {
+          this.goods[type].page++;
+          this.goods[type].list.push(...res.data.list);
+        }
       })
     },
     init () {
@@ -122,6 +145,10 @@ export default {
       this.getHomeGoods('pop');
       this.getHomeGoods('new');
       this.getHomeGoods('sell');
+
+      this.$bus.$on('itemImageLoad', () => {
+        this.$refs.scroll && this.$refs.scroll.refresh();
+      })
     }
   },
   created () {
