@@ -1,12 +1,10 @@
 <template>
-  <div class="goods-item">
-    <img :src="goodItem.show.img"
-         @load="imageLoad"
-         alt="">
+  <div class="goods-item" @click="itemClick">
+    <img :src="goodItem.show.img" @load="imageLoad" alt="" />
     <div class="goods-info">
-      <p>{{goodItem.title}}</p>
-      <span class="price">{{goodItem.price}}</span>
-      <span class="collect">{{goodItem.cfav}}</span>
+      <p>{{ goodItem.title }}</p>
+      <span class="price">{{ goodItem.price }}</span>
+      <span class="collect">{{ goodItem.cfav }}</span>
     </div>
   </div>
 </template>
@@ -49,13 +47,13 @@
 }
 
 .goods-info .collect::before {
-  content: "";
+  content: '';
   position: absolute;
   left: -15px;
   top: -1px;
   width: 14px;
   height: 14px;
-  background: url("~assets/img/common/collect.svg") 0 0/14px 14px;
+  background: url('~assets/img/common/collect.svg') 0 0/14px 14px;
 }
 </style>
 
@@ -65,21 +63,25 @@ export default {
   props: {
     goodItem: {
       type: Object,
-      default () {
-        return {}
-      }
-    }
+      default() {
+        return {};
+      },
+    },
   },
-  data () {
+  data() {
     return {};
   },
   watch: {},
   computed: {},
   methods: {
-    imageLoad () {
+    imageLoad() {
       this.$bus.$emit('itemImageLoad');
-    }
+    },
+    itemClick() {
+      console.log('详情页点击');
+      this.$router.push('/detail/' + this.goodItem.iid);
+    },
   },
-  created () { }
+  created() {},
 };
 </script>
