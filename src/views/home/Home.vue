@@ -81,6 +81,7 @@ import HomeSwiper from './components/HomeSwiper';
 import RecommendView from './components/RecommendView';
 import Feature from './components/Feature';
 export default {
+  name: 'Home',
   components: {
     NavBar,
     TabControl,
@@ -164,7 +165,7 @@ export default {
     },
     debounce(func, delay) {
       let timer = null;
-      return function(...args) {
+      return function (...args) {
         if (timer) {
           clearTimeout(timer);
         }
@@ -185,7 +186,7 @@ export default {
   },
   mounted() {
     const refresh = this.debounce(this.$refs.scroll.refresh, 500);
-    this.$bus.$on('itemImageLoad', function() {
+    this.$bus.$on('itemImageLoad', function () {
       refresh();
     });
     // this.$bus.$on('itemImageLoad', function() {

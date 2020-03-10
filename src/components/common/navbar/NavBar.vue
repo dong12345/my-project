@@ -1,16 +1,13 @@
 <template>
   <div class="nav-bar">
-    <div class="left"
-         :style="centerBg">
+    <div class="left" :style="centerBg">
       <slot name="left"></slot>
     </div>
     <div class="center">
       <slot name="center"></slot>
     </div>
     <div class="right">
-      <slot name="right">
-
-      </slot>
+      <slot name="right"> </slot>
     </div>
   </div>
 </template>
@@ -38,20 +35,20 @@ export default {
   props: {
     centerBgColor: {
       type: String,
-      default: 'pink'
-    }
+      default: 'pink',
+    },
   },
   components: {},
-  data () {
+  data() {
     return {};
   },
   watch: {},
   computed: {
-    centerBg () {
+    centerBg() {
       return { color: this.centerBgColor };
-    }
+    },
   },
   methods: {},
-  created () { }
+  created() {},
 };
 </script>
